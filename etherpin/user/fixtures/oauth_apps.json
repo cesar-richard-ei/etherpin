@@ -1,0 +1,15 @@
+[
+    {
+        "model": "socialaccount.socialapp",
+        "pk": 1,
+        "fields": {
+            "provider": "github",
+            "provider_id": "",
+            "name": "Etherpin",
+            "client_id": "2e0699922ab0461fa1fd",
+            "secret": "0be9152c1e68a5b986efc6c1f59db21865f8a5bc",
+            "key": "",
+            "settings": {}
+        }
+    }
+]

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Etherpin</title>
+  </head>
+  <body>
+    {% load socialaccount %} {% providers_media_js %}
+    <a
+      href="{% provider_login_url 'github' method='js_sdk' %}?redirect_uri=https://2d40-2a01-e0a-81a-4c60-d4e3-1c9-6635-a099.ngrok-free.app"
+      >login with github</a
+    >
+  </body>
+</html>
