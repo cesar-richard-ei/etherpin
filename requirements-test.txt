@@ -1,0 +1,8 @@
+factory_boy
+pytest
+pytest-cov
+pytest-django
+pytest-env
+pytest-lazy-fixture
+pytest-watch
+responses
