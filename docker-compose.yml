@@ -17,6 +17,8 @@ services:
     build:
       context: .
       target: migrator
+      cache_from:
+        - licorneutc/etherpin:migrator-latest
     develop:
       watch:
           - action: rebuild
@@ -33,6 +35,8 @@ services:
     build:
       context: .
       target: development
+      cache_from:
+        - licorneutc/etherpin:development-latest
     develop:
       watch:
           - action: rebuild
