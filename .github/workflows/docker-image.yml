@@ -13,16 +13,16 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker development image
-      run: docker build . --file Dockerfile --tag etherpin-development:$(date +%s)
+      run: docker build . --file Dockerfile --tag etherpin-development:$(date +%s) --target development
   build-migrator:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker migrator image
-      run: docker build . --file Dockerfile --tag etherpin-migrator:$(date +%s)
+      run: docker build . --file Dockerfile --tag etherpin-migrator:$(date +%s) --target migrator
   build-final:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker final image
-      run: docker build . --file Dockerfile --tag etherpin:$(date +%s)
+      run: docker build . --file Dockerfile --tag etherpin:$(date +%s) --target final
