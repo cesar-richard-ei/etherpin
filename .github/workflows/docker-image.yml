@@ -24,7 +24,7 @@ jobs:
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
           images: licorneutc/etherpin-development
-          tags: latest, $(date +%s)
+          tags: latest, ${{github.run_number}}
           labels: |
             org.opencontainers.image.title=EtherPin Development Image
             org.opencontainers.image.description=Development ready image
@@ -56,7 +56,7 @@ jobs:
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
           images: licorneutc/etherpin-migrator
-          tags: latest, $(date +%s)
+          tags: latest, ${{github.run_number}}
           labels: |
             org.opencontainers.image.title=EtherPin Migrator Image
             org.opencontainers.image.description=Migrator image
@@ -87,7 +87,7 @@ jobs:
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
           images: licorneutc/etherpin
-          tags: latest, $(date +%s)
+          tags: latest, ${{github.run_number}}
           labels: |
             org.opencontainers.image.title=EtherPin Image
             org.opencontainers.image.description=Production image
