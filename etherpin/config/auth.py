@@ -1,10 +1,5 @@
 SOCIALACCOUNT_PROVIDERS = {
-    "github": {
-        # For each provider, you can choose whether or not the
-        # email address(es) retrieved from the provider are to be
-        # interpreted as verified.
-        "VERIFIED_EMAIL": True
-    },
+    "github": {"VERIFIED_EMAIL": True},
 }
 
 SITE_ID = 1
@@ -12,7 +7,7 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
-LOGIN_REDIRECT_URL = "https://github.com"
+LOGIN_REDIRECT_URL = "http://localhost:8000/admin"
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -28,3 +23,6 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",  # noqa: E501
     },
 ]
+
+AUTH_USER_MODEL = "user.User"
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
