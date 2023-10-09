@@ -17,6 +17,10 @@ services:
     build:
       context: .
       target: migrator
+    develop:
+      watch:
+          - action: rebuild
+            path: ./requirements*.txt
     environment:
       ETHERPIN_DJANGO_SECRET: "mysupersecretsecret"
       ETHERPIN_DB_DEFAULT: "postgres://etherpin:etherpin@db/etherpin"
@@ -29,11 +33,15 @@ services:
     build:
       context: .
       target: development
+    develop:
+      watch:
+          - action: rebuild
+            path: ./requirements*.txt
     environment:
       ETHERPIN_DJANGO_SECRET: "mysupersecretsecret"
       ETHERPIN_DB_DEFAULT: "postgres://etherpin:etherpin@db/etherpin"
     ports:
-      - "8003:8000"
+      - "8000:8000"
     volumes:
       - .:/srv
     links:

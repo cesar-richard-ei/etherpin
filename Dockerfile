@@ -28,6 +28,7 @@ RUN pip install --no-cache-dir uwsgi
 ADD requirements.txt /srv/
 RUN pip install --no-cache-dir -r requirements.txt
 RUN apt-get purge -y ${BUILD_DEPS} && apt-get autoremove -y && apt-get clean -y && rm -r /var/lib/apt/lists/*
+ENV BUILD_DEPS=""
 # Uwsgi runs on port 8000
 EXPOSE 8000
 # Add code
