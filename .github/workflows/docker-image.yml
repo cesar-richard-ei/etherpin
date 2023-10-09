@@ -8,53 +8,97 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-development:
+  build_push_development:
+    name: Push Development Docker image to Docker Hub
     runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker development image
-      run: docker build . --file Dockerfile --tag etherpin-development:$(date +%s) --target development
-  build-migrator:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker migrator image
-      run: docker build . --file Dockerfile --tag etherpin-migrator:$(date +%s) --target migrator
-  build-final:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker final image
-      run: docker build . --file Dockerfile --tag etherpin:$(date +%s) --target final
-
-  push_to_registry:
-    name: Push Docker image to Docker Hub
-    runs-on: ubuntu-latest
-    # needs:
-    #   - build-development
-    #   - build-migrator
-    #   - build-final
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
-      
       - name: Log in to Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
         with:
           username: ${{ secrets.DOCKER_LOGIN }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: licorneutc/etherpin
-      
+          images: licorneutc/etherpin-development
+          tags: latest, $(date +%s)
+          labels: |
+            org.opencontainers.image.title=EtherPin Development Image
+            org.opencontainers.image.description=Development ready image
+            org.opencontainers.image.vendor=Cesar Richard EI
+            org.opencontainers.image.author=Cesar Richard <cesar.richard2@gmail.com>
       - name: Build and push Docker image
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
         with:
           context: .
           file: ./Dockerfile
+          target: development
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          
+  build_push_migrator:
+    name: Push Migrator Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.DOCKER_LOGIN }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: licorneutc/etherpin-migrator
+          tags: latest, $(date +%s)
+          labels: |
+            org.opencontainers.image.title=EtherPin Migrator Image
+            org.opencontainers.image.description=Migrator image
+            org.opencontainers.image.vendor=Cesar Richard EI
+            org.opencontainers.image.author=Cesar Richard <cesar.richard2@gmail.com>
+      - name: Build and push Docker image
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: .
+          file: ./Dockerfile
+          target: migrator
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+  build_push_final:
+    name: Push production Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.DOCKER_LOGIN }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: licorneutc/etherpin
+          tags: latest, $(date +%s)
+          labels: |
+            org.opencontainers.image.title=EtherPin Image
+            org.opencontainers.image.description=Production image
+            org.opencontainers.image.vendor=Cesar Richard EI
+            org.opencontainers.image.author=Cesar Richard <cesar.richard2@gmail.com>
+      - name: Build and push Docker image
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: .
+          file: ./Dockerfile
+          target: final
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
