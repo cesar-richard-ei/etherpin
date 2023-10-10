@@ -8,6 +8,7 @@ INSTALLED_APPS = [
     # extensions
     "django.contrib.admindocs",
     "django_extensions",
+    "rest_framework",
     # allauth
     "allauth",
     "allauth.account",

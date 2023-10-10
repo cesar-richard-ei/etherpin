@@ -4,6 +4,7 @@ psycopg2-binary
 django-allauth
 django-environ
 split_settings
+djangorestframework
 Pillow
 docutils
 django-extensions

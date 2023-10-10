@@ -44,7 +44,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          
+
   build_push_migrator:
     name: Push Migrator Docker image to Docker Hub
     runs-on: ubuntu-latest
