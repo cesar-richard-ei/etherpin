@@ -24,8 +24,7 @@ services:
           - action: rebuild
             path: ./requirements*.txt
     environment:
-      ETHERPIN_DJANGO_SECRET: "mysupersecretsecret"
-      ETHERPIN_DB_DEFAULT: "postgres://etherpin:etherpin@db/etherpin"
+      INFISICAL_TOKEN: "st.6527ddee79ae49ee9dfc160f.d555a31eb1563f3bf1ee72a6f001ddb9.af4f02caa62ef00559b5d96f588103c7"  # db-dev
     links:
       - db
     depends_on:
@@ -42,8 +41,7 @@ services:
           - action: rebuild
             path: ./requirements*.txt
     environment:
-      ETHERPIN_DJANGO_SECRET: "mysupersecretsecret"
-      ETHERPIN_DB_DEFAULT: "postgres://etherpin:etherpin@db/etherpin"
+      INFISICAL_TOKEN: "st.6527de0320be947d92e91c7d.922811965d60fd55f66f281377c0dc9a.4b65b89fb8fd8e5d6cc1b82ba57764b3"  # web-dev
     ports:
       - "8000:8000"
     volumes:

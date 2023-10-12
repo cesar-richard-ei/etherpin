@@ -1,0 +1,8 @@
+venv
+media
+static
+.gitignore
+.github
+.vscode
+ReadMe.md
+CODE_OF_CONDUCT.md
