@@ -1,6 +1,9 @@
 from django.shortcuts import render
+from .UserViewSet import UserViewSet
 
 
-# Create your views here.
 def home(request):
     return render(request, "home.html")
+
+
+__all__ = ["UserViewSet", "home"]

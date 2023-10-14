@@ -5,7 +5,7 @@ ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PATH="/home/etherpin/.local/bin:${PATH}"
 
-ENV BUILD_DEPS="build-essential"
+ENV BUILD_DEPS="build-essential curl"
 
 # Setup working directory
 RUN mkdir -p /srv /home/etherpin/.ssh /static
@@ -16,14 +16,14 @@ RUN groupadd -r etherpin && useradd -r -g etherpin etherpin
 
 # Install tmate for shells
 RUN apt-get update && apt-get dist-upgrade -y && apt-get install --no-install-recommends -y ${BUILD_DEPS}
-
+RUN curl -1sLf \
+    'https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.deb.sh' |  bash
+RUN apt-get install --no-install-recommends -y infisical
 RUN chown etherpin:etherpin -R /home/etherpin /srv
 
 FROM builder AS dependencies
-
 # Install uwsgi
 RUN pip install --no-cache-dir uwsgi
-
 # Install etherpin requirements (doing this before copying code improves caching)
 ADD requirements.txt /srv/
 RUN pip install --no-cache-dir -r requirements.txt
@@ -31,24 +31,27 @@ RUN apt-get purge -y ${BUILD_DEPS} && apt-get autoremove -y && apt-get clean -y 
 ENV BUILD_DEPS=""
 # Uwsgi runs on port 8000
 EXPOSE 8000
-# Add code
-ADD . /srv/
-# Switch to unprivileged user
-USER etherpin
 
 FROM dependencies AS front_builder
+ADD . /srv/
 # Collect static files
 RUN ETHERPIN_DJANGO_SECRET=whatever python manage.py collectstatic --noinput --clear
+USER etherpin
 
-FROM front_builder AS development
+FROM dependencies AS development
+ADD requirements-dev.txt /srv/
 RUN pip install --no-cache-dir -r requirements-dev.txt
+ADD . /srv/
+RUN ETHERPIN_DJANGO_SECRET=whatever python manage.py collectstatic --noinput --clear
+USER etherpin
 # Run uwsgi
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["infisical", "run", "--", "python", "manage.py", "runserver", "0.0.0.0:8000"]
 
 FROM front_builder AS final
 # Run uwsgi
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["infisical", "run", "--", "python", "manage.py", "runserver", "0.0.0.0:8000"]
 
 FROM dependencies AS migrator
+ADD . /srv/
 # Run migrations
-CMD ["python", "manage.py", "migrate", "--noinput"]
+CMD ["infisical", "run", "--", "python", "manage.py", "migrate", "--noinput"]
