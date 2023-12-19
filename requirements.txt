@@ -8,3 +8,5 @@ djangorestframework
 Pillow
 docutils
 django-extensions
+
+debugpy==1.5.1

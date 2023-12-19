@@ -4,10 +4,12 @@ services:
     image: postgres
     ports:
       - "5432:5432"
+    user: postgres
     environment:
       POSTGRES_USER: etherpin
       POSTGRES_PASSWORD: etherpin
       POSTGRES_DB: etherpin
+      INFISICAL_TOKEN: st.652d33834972316499433995.1c898a000a02a87c0338e2983ccc9630.2030b56aaf5bbc8d81d77b6fb7df4bd2  # db-dev
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 1s
@@ -16,34 +18,40 @@ services:
   migrator:
     build:
       context: .
+      dockerfile: docker/Dockerfile
       target: migrator
       cache_from:
         - licorneutc/etherpin:migrator-latest
     develop:
       watch:
           - action: rebuild
-            path: ./requirements*.txt
+            path: ./requirements.txt
     environment:
-      INFISICAL_TOKEN: "st.6527ddee79ae49ee9dfc160f.d555a31eb1563f3bf1ee72a6f001ddb9.af4f02caa62ef00559b5d96f588103c7"  # db-dev
+      INFISICAL_TOKEN: "st.652d33bfb9843e37c9e7d6ef.5867a4a0e7111f794c21072f58a54c02.e5fd4a5e792ce4bf8c0e9b48faa62258"  # django-dev
     links:
       - db
     depends_on:
       db:
         condition: service_healthy
+    ports:
+      - "3000:3000"
   web:
     build:
       context: .
+      dockerfile: docker/Dockerfile
       target: development
       cache_from:
         - licorneutc/etherpin:development-latest
+    read_only: true
     develop:
       watch:
           - action: rebuild
-            path: ./requirements*.txt
+            path: ./requirements.txt
     environment:
-      INFISICAL_TOKEN: "st.6527de0320be947d92e91c7d.922811965d60fd55f66f281377c0dc9a.4b65b89fb8fd8e5d6cc1b82ba57764b3"  # web-dev
+      INFISICAL_TOKEN: "st.652d33bfb9843e37c9e7d6ef.5867a4a0e7111f794c21072f58a54c02.e5fd4a5e792ce4bf8c0e9b48faa62258"  # django-dev
     ports:
       - "8000:8000"
+      - "3001:3001"
     volumes:
       - .:/srv
     links:
