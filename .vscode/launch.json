@@ -1,0 +1,31 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug migrator",
+        "type": "python",
+        "request": "attach",
+        "pathMappings": [
+          {
+            "localRoot": "${workspaceFolder}",
+            "remoteRoot": "/code"
+          }
+        ],
+        "port": 3000,
+        "host": "127.0.0.1",
+      },
+      {
+        "name": "Debug web",
+        "type": "python",
+        "request": "attach",
+        "pathMappings": [
+          {
+            "localRoot": "${workspaceFolder}",
+            "remoteRoot": "/code"
+          }
+        ],
+        "port": 3001,
+        "host": "127.0.0.1",
+      }
+    ]
+  }

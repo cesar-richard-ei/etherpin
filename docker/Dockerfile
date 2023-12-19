@@ -1,7 +1,7 @@
 FROM python:3.11-slim-bookworm AS builder
 LABEL org.opencontainers.image.authors="Cesar Richard <cesar@crichard.fr>"
 
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PATH="/home/etherpin/.local/bin:${PATH}"
 
@@ -28,7 +28,7 @@ RUN pip install --no-cache-dir uwsgi
 ADD requirements.txt /srv/
 RUN pip install --no-cache-dir -r requirements.txt
 RUN apt-get purge -y ${BUILD_DEPS} && apt-get autoremove -y && apt-get clean -y && rm -r /var/lib/apt/lists/*
-ENV BUILD_DEPS=""
+RUN unset BUILD_DEPS
 # Uwsgi runs on port 8000
 EXPOSE 8000
 
@@ -45,6 +45,7 @@ ADD . /srv/
 RUN ETHERPIN_DJANGO_SECRET=whatever python manage.py collectstatic --noinput --clear
 USER etherpin
 # Run uwsgi
+ENV XDEBUG_PORT 3000
 CMD ["infisical", "run", "--", "python", "manage.py", "runserver", "0.0.0.0:8000"]
 
 FROM front_builder AS final
@@ -52,6 +53,7 @@ FROM front_builder AS final
 CMD ["infisical", "run", "--", "python", "manage.py", "runserver", "0.0.0.0:8000"]
 
 FROM dependencies AS migrator
+ENV XDEBUG_PORT 3000
 ADD . /srv/
 # Run migrations
-CMD ["infisical", "run", "--", "python", "manage.py", "migrate", "--noinput"]
+CMD ["infisical", "run", "--path", "/database", "--", "python", "manage.py", "migrate", "--noinput"]

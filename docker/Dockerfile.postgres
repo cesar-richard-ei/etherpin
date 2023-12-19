@@ -1,0 +1,2 @@
+FROM postgres
+RUN groupadd -r etherpin && useradd -r -g etherpin etherpin
